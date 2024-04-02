@@ -1,6 +1,7 @@
 package br.com.voting.vote.controller;
 
 import br.com.voting.vote.dto.VoteDTO;
+import br.com.voting.vote.models.ResultVote;
 import br.com.voting.vote.services.VoteService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,19 +26,10 @@ public class VoteController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/countYes/{topicID}")
-    public ResponseEntity<Integer> countVotesYes(@PathVariable Long topicID) {
-        return ResponseEntity.ok(voteService.countVotesYes(topicID));
-    }
-
-    @GetMapping("/countNo/{topicID}")
-    public ResponseEntity<Integer> countVotesNo(@PathVariable Long topicID) {
-        return ResponseEntity.ok(voteService.countVotesNo(topicID));
-    }
-
     @GetMapping("/result/{topicID}")
-    public ResponseEntity<Boolean> voteResult(@PathVariable Long topicID) {
-        return ResponseEntity.ok(voteService.approvedTopic(topicID));
+    public ResponseEntity<ResultVote> resultVote(@PathVariable String topicID) {
+        ResultVote resultVote = voteService.voteResult(Long.parseLong(topicID));
+        return ResponseEntity.ok(resultVote);
     }
 
 }

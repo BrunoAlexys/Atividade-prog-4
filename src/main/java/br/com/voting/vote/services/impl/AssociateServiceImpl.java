@@ -1,6 +1,7 @@
 package br.com.voting.vote.services.impl;
 
 import br.com.voting.vote.dto.AssociateDTO;
+import br.com.voting.vote.exception.AssociateNotFoundException;
 import br.com.voting.vote.models.Associate;
 import br.com.voting.vote.repository.AssociateRepository;
 import br.com.voting.vote.services.AssociateService;
@@ -32,7 +33,8 @@ public class AssociateServiceImpl implements AssociateService {
 
     @Override
     public Associate getAssociate(String id) {
-        return associateRepository.findById(Long.parseLong(id)).orElseThrow(() -> new RuntimeException("Associate not found"));
+        return associateRepository.findById(Long.parseLong(id))
+                .orElseThrow(() -> new AssociateNotFoundException("Associate not found"));
     }
 
     @Override

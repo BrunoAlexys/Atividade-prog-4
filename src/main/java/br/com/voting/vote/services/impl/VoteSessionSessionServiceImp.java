@@ -47,17 +47,4 @@ public class VoteSessionSessionServiceImp implements VoteSessionService {
         votingSessionRepository.save(votingSession);
     }
 
-    @Transactional
-    @Scheduled(fixedDelay = 60000) // Executa a cada minuto
-    @Override
-    public void updateExpiredVotingSessions() {
-        List<VotingSession> votingSessions = votingSessionRepository.findByStatus(StatusVotingSession.OPEN);
-
-        votingSessions.forEach(votingSession -> {
-            if (votingSession.getEndSession().isBefore(LocalDateTime.now())) {
-                votingSession.setStatus(StatusVotingSession.CLOSED);
-                votingSessionRepository.save(votingSession);
-            }
-        });
-    }
 }

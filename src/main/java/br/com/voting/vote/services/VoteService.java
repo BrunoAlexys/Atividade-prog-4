@@ -1,10 +1,9 @@
 package br.com.voting.vote.services;
 
 import br.com.voting.vote.dto.VoteDTO;
+import br.com.voting.vote.models.ResultVote;
 
 public interface VoteService {
     void vote(VoteDTO voteDTO);
-    int countVotesYes(Long topicID);
-    int countVotesNo(Long topicID);
-    boolean approvedTopic(Long topicID);
+    ResultVote voteResult(Long topicID);
 }

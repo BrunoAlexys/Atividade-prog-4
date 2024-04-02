@@ -1,5 +1,6 @@
 package br.com.voting.vote.models;
 
+import br.com.voting.vote.dto.VoteDTO;
 import br.com.voting.vote.enums.TypeVote;
 import jakarta.persistence.*;
 
@@ -34,7 +35,9 @@ public class Vote {
     }
 
     public Vote() {
+
     }
+
 
     public Long getId() {
         return id;
