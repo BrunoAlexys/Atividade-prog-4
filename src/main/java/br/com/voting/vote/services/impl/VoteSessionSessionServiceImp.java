@@ -7,12 +7,10 @@ import br.com.voting.vote.repository.TopicRepository;
 import br.com.voting.vote.repository.VoteRepository;
 import br.com.voting.vote.repository.VotingSessionRepository;
 import br.com.voting.vote.services.VoteSessionService;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class VoteSessionSessionServiceImp implements VoteSessionService {

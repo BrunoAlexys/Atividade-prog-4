@@ -32,7 +32,7 @@ public class VoteServiceImp implements VoteService {
         this.topicRepository = topicRepository;
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = {SessionExpiredException.class})
     @Override
     public void vote(VoteDTO voteDTO) {
         var votingSession = votingSessionRepository.findById(voteDTO.sessionID())
@@ -42,29 +42,27 @@ public class VoteServiceImp implements VoteService {
         var topic = topicRepository.findById(voteDTO.topicID())
                 .orElseThrow(() -> new TopicNotFoundException("topic not found!"));
 
+        boolean hasVoted = voteRepository
+                .existsByAssociateAndTopic(associate, topic);
+
+
         if (votingSession.getEndSession().isBefore(LocalDateTime.now())) {
             //Não está alterando o Status no banco
             votingSession.setStatus(StatusVotingSession.CLOSED);
             votingSessionRepository.save(votingSession);
             throw new SessionExpiredException("Session expired!");
-        }
-
-        boolean hasVoted = voteRepository
-                .existsByAssociateAndTopic(associate, topic);
-
-        if (hasVoted) {
+        } else if (hasVoted) {
             throw new AssociateHasAlreadyVotedException("Associate has already voted");
+        } else {
+            var vote = new Vote();
+            associate.setId(voteDTO.associateID());
+            vote.setAssociate(associate);
+            vote.setTopic(votingSession.getTopic());
+            vote.setVotingSession(votingSession);
+            vote.setTypeVote(voteDTO.typeVote());
+            voteRepository.save(vote);
         }
 
-        var vote = new Vote();
-
-        associate.setId(voteDTO.associateID());
-        vote.setAssociate(associate);
-        vote.setTopic(votingSession.getTopic());
-        vote.setVotingSession(votingSession);
-        vote.setTypeVote(voteDTO.typeVote());
-
-        voteRepository.save(vote);
     }
 
     @Override
