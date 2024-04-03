@@ -47,7 +47,6 @@ public class VoteServiceImp implements VoteService {
 
 
         if (votingSession.getEndSession().isBefore(LocalDateTime.now())) {
-            //Não está alterando o Status no banco
             votingSession.setStatus(StatusVotingSession.CLOSED);
             votingSessionRepository.save(votingSession);
             throw new SessionExpiredException("Session expired!");
