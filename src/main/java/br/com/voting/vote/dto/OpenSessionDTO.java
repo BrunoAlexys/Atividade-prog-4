@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 
 public record OpenSessionDTO(
         @NotNull(message = "Topic ID is required")
-        Long topicId,
+        String topicId,
+        LocalDateTime startTime,
         LocalDateTime endTime
 ) {
 }

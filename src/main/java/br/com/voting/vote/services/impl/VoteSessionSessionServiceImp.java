@@ -29,7 +29,12 @@ public class VoteSessionSessionServiceImp implements VoteSessionService {
     @Override
     public void openSession(OpenSessionDTO openSessionDTO) {
         var votingSession = new VotingSession();
-        votingSession.setStartSession(LocalDateTime.now());
+
+        if (openSessionDTO.startTime() != null) {
+            votingSession.setStartSession(openSessionDTO.startTime());
+        } else {
+            votingSession.setStartSession(LocalDateTime.now());
+        }
 
         if (openSessionDTO.endTime() != null) {
             votingSession.setEndSession(openSessionDTO.endTime());
@@ -37,7 +42,7 @@ public class VoteSessionSessionServiceImp implements VoteSessionService {
             votingSession.setEndSession(LocalDateTime.now().plusMinutes(1));
         }
 
-        var topic = topicRepository.findById(openSessionDTO.topicId()).orElseThrow(() -> new RuntimeException("Topic not found"));
+        var topic = topicRepository.findById(Long.parseLong(openSessionDTO.topicId())).orElseThrow(() -> new RuntimeException("Topic not found"));
 
         votingSession.setTopic(topic);
         votingSession.setStatus(StatusVotingSession.OPEN);
